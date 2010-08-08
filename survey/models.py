@@ -14,12 +14,12 @@ from django.contrib.contenttypes import generic
 
 
 QTYPE_CHOICES = (
-    ('T', 'Text Input'),
-    ('A', 'Text Area'),
-    ('S', 'Select One Choice'),
-    ('R', 'Radio List'),
-    ('I', 'Radio Image List'),
-    ('C', 'Checkbox List')
+    ('T', _('Text Input')),
+    ('A', _('Text Area')),
+    ('S', _('Select One Choice')),
+    ('R', _('Radio List')),
+    ('I', _('Radio Image List')),
+    ('C', _('Checkbox List'))
 )
 
 class SurveyManager(models.Manager):
@@ -27,6 +27,9 @@ class SurveyManager(models.Manager):
     def surveys_for(self, recipient):
         recipient_type = ContentType.objects.get_for_model(recipient)
         return Survey.objects.filter(visible=True,recipient_type=recipient_type, recipient_id=recipient.id)
+
+    def latest_surveys(self):
+        return self.get_query_set().order_by('-opens')
 
 
 class Survey(models.Model):
